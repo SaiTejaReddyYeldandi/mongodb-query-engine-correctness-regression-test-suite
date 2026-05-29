@@ -1,0 +1,17 @@
+{
+  "pipeline": [
+    {
+      "$group": {
+        "_id": "$dept",
+        "payroll": {
+          "$sum": "$salary"
+        }
+      }
+    }
+  ],
+  "expected_normalized": [
+    "{\"_id\": \"eng\", \"payroll\": 370}",
+    "{\"_id\": \"ops\", \"payroll\": 210}",
+    "{\"_id\": \"sales\", \"payroll\": 290}"
+  ]
+}

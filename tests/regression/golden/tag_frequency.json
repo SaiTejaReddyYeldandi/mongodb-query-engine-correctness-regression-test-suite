@@ -1,0 +1,22 @@
+{
+  "pipeline": [
+    {
+      "$unwind": "$tags"
+    },
+    {
+      "$group": {
+        "_id": "$tags",
+        "count": {
+          "$sum": 1
+        }
+      }
+    }
+  ],
+  "expected_normalized": [
+    "{\"_id\": \"bash\", \"count\": 1}",
+    "{\"_id\": \"go\", \"count\": 2}",
+    "{\"_id\": \"mongo\", \"count\": 1}",
+    "{\"_id\": \"python\", \"count\": 3}",
+    "{\"_id\": \"rust\", \"count\": 1}"
+  ]
+}

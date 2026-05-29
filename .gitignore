@@ -1,0 +1,10 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.hypothesis/
+allure-results/
+allure-report/
+.venv/
+venv/
+*.egg-info/
+.coverage

@@ -1,0 +1,30 @@
+{
+  "pipeline": [
+    {
+      "$project": {
+        "name": 1,
+        "total": {
+          "$add": [
+            "$salary",
+            {
+              "$multiply": [
+                "$salary",
+                0.1
+              ]
+            }
+          ]
+        },
+        "_id": 0
+      }
+    }
+  ],
+  "expected_normalized": [
+    "{\"name\": \"Ann\", \"total\": 110.0}",
+    "{\"name\": \"Bob\", \"total\": 132.0}",
+    "{\"name\": \"Cleo\", \"total\": 99.0}",
+    "{\"name\": \"Dan\", \"total\": 220.0}",
+    "{\"name\": \"Eve\", \"total\": 165.0}",
+    "{\"name\": \"Finn\", \"total\": 88.0}",
+    "{\"name\": \"Gwen\", \"total\": 143.0}"
+  ]
+}

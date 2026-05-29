@@ -1,0 +1,54 @@
+name: query-engine-tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  # ---------------------------------------------------------------------
+  # Fast lane: pure-Python oracle + property invariants. No Docker needed,
+  # so it finishes in seconds and gives quick feedback on every push.
+  # ---------------------------------------------------------------------
+  fast-lane:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run oracle + property tests (no MongoDB)
+        run: pytest -m "not mongo" -v
+
+  # ---------------------------------------------------------------------
+  # Correctness matrix: the FULL suite against three real MongoDB versions
+  # in parallel. testcontainers starts each server inside the job.
+  # ---------------------------------------------------------------------
+  correctness-matrix:
+    runs-on: ubuntu-latest
+    needs: fast-lane
+    strategy:
+      fail-fast: false           # one version failing must not hide the others
+      matrix:
+        mongo: ["mongo:6.0", "mongo:7.0", "mongo:8.0"]
+    name: mongo ${{ matrix.mongo }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+      - name: Run full suite against ${{ matrix.mongo }}
+        env:
+          MONGO_IMAGE: ${{ matrix.mongo }}
+        run: pytest -n auto --alluredir=allure-results -v
+      - name: Upload Allure results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results-${{ strategy.job-index }}
+          path: allure-results

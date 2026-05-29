@@ -1,0 +1,13 @@
+# Core testing
+pytest==8.3.4
+pytest-xdist==3.6.1          # parallel test execution (-n auto)
+
+# MongoDB driver + throwaway containers
+pymongo==4.10.1
+testcontainers[mongodb]==4.9.0
+
+# Property-based testing (Milestone 3)
+hypothesis==6.122.3
+
+# Reporting (Milestone — Allure)
+allure-pytest==2.13.5

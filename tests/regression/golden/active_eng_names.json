@@ -1,0 +1,21 @@
+{
+  "pipeline": [
+    {
+      "$match": {
+        "dept": "eng",
+        "active": true
+      }
+    },
+    {
+      "$project": {
+        "name": 1,
+        "_id": 0
+      }
+    }
+  ],
+  "expected_normalized": [
+    "{\"name\": \"Ann\"}",
+    "{\"name\": \"Bob\"}",
+    "{\"name\": \"Eve\"}"
+  ]
+}

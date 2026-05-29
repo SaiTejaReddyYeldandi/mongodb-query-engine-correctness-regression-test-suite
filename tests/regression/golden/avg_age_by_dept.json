@@ -1,0 +1,17 @@
+{
+  "pipeline": [
+    {
+      "$group": {
+        "_id": "$dept",
+        "avg_age": {
+          "$avg": "$age"
+        }
+      }
+    }
+  ],
+  "expected_normalized": [
+    "{\"_id\": \"eng\", \"avg_age\": 37.666666666666664}",
+    "{\"_id\": \"ops\", \"avg_age\": 36.5}",
+    "{\"_id\": \"sales\", \"avg_age\": 40.5}"
+  ]
+}
